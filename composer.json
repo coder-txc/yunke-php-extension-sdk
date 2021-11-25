@@ -1,0 +1,19 @@
+{
+  "name": "yunke/extension-sdk",
+  "authors": [
+    {
+      "name": "yaodongxiu",
+      "email": "945726867@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "ext-json": "*",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ExtensionService\\": "src"
+    }
+  }
+}
