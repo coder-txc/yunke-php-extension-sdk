@@ -1,9 +1,9 @@
 {
-  "name": "yunke/extension-sdk",
+  "name": "php/extension-sdk",
   "authors": [
     {
-      "name": "yaodongxiu",
-      "email": "945726867@qq.com"
+      "name": "yaodx01",
+      "email": "yaodx01@mingyuanyun.com"
     }
   ],
   "require": {
