@@ -13,7 +13,7 @@ $condition = [
     "orgcode" => $orgCode,
     "mini_app_id" => $miniAppID,
 ];
-$data = [
+$businessData = [
     "company_id" => 1,
     "node_id" => 15,
     "namespace_code" => "default",
@@ -22,17 +22,19 @@ $data = [
 
 class ExecuteClass implements \ExtensionService\Executable
 {
-    function execute($data)
+    function execute($businessData)
     {
-        return ["haha" => "it is the result return from transformation class of original method"];
+        $businessData["haha"] = "it is the result return from transformation class of original method";
+        var_dump($businessData);
+        return $businessData;
     }
 }
 
 try {
-    $res = $epsClient->execute( // interfaceMethod is not exits, it will run execute func in ExecuteClass
+    $res = $epsClient->execute( // interfaceMethod is not exist, it will run execute func in ExecuteClass
         $interfaceMethod,
         $condition,
-        $data,
+        $businessData,
         new ExecuteClass()
     );
     var_dump($res);

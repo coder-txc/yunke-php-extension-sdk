@@ -12,8 +12,8 @@ namespace ExtensionService;
 interface Executable
 {
     /**
-     * @param array $data
+     * @param array $businessData 业务参数
      * @return array
      */
-    function execute($data);
+    function execute($businessData);
 }

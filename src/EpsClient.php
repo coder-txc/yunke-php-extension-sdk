@@ -173,13 +173,13 @@ class EpsClient
     /**
      * @param string $interfaceMethod
      * @param array $condition
-     * @param array $data
+     * @param array $businessData
      * @return string
      * @throws JsonEncodeException
      */
-    private function buildBodyStr($interfaceMethod, $condition, $data)
+    private function buildBodyStr($interfaceMethod, $condition, $businessData)
     {
-        $dataStr = json_encode($data);
+        $dataStr = json_encode($businessData);
         if ($dataStr === false) {
             throw new JsonEncodeException("data json encode fail.");
         }

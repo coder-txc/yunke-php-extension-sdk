@@ -13,7 +13,7 @@ $condition = [
     "orgcode" => $orgCode,
     "mini_app_id" => $miniAppID,
 ];
-$data = [
+$businessData = [
     "company_id" => 1,
     "node_id" => 15,
     "namespace_code" => "default",
@@ -24,7 +24,7 @@ try {
     $res = $epsClient->execute( // it will run interfaceMethod
         $interfaceMethod,
         $condition,
-        $data
+        $businessData
     );
     var_dump($res);
 } catch (\Exception $e) {

@@ -13,7 +13,7 @@ $condition = [
     "orgcode" => $orgCode,
     "mini_app_id" => $miniAppID,
 ];
-$data = [
+$businessData = [
     "company_id" => 1,
     "node_id" => 15,
     "namespace_code" => "default",
@@ -22,10 +22,11 @@ $data = [
 
 class OtherClass
 {
-    function execute($data)
+    function execute($businessData)
     {
-        $data["wuwu"] = "this class does not impl Executable";
-        return $data;
+        $businessData["wuwu"] = "this class does not impl Executable";
+        var_dump($businessData);
+        return $businessData;
     }
 }
 
@@ -33,7 +34,7 @@ try {
     $res = $epsClient->execute( // throw ExtensionService\Exception\NonExecutableException
         $interfaceMethod,
         $condition,
-        $data,
+        $businessData,
         new OtherClass()
     );
     var_dump($res);
