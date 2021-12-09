@@ -27,6 +27,9 @@ class EpsClient
     /** @var int $timeout 请求超时时间设置，单位秒，0秒即永不超时 */
     private $timeout;
 
+    /** @var array $headers 请求头 */
+    private $headers;
+
     /**
      * Client constructor.
      *
@@ -93,6 +96,8 @@ class EpsClient
         $bodyStr = $this->buildBodyStr($interfaceMethod, $condition, $businessData);
 
         $headers = $this->buildHeaders($bodyStr);
+        $appendHeaders = $this->headers ?: $condition;
+        $headers = $this->appendHeaders($headers, $appendHeaders);
 
         $responseBody = $this->handleExecute($bodyStr, $headers);
 
@@ -231,5 +236,34 @@ class EpsClient
         $str = $this->accessKeyId . $this->accessKeySecret . (string)$timestamp . $bodyStr;
 
         return md5($str);
+    }
+
+    /**
+     * 设置请求头
+     * @param array $headers
+     * @return $this
+     */
+    public function setHeaders($headers)
+    {
+        if (!is_array($headers))
+            $headers = [];
+        $this->headers = $headers;
+        return $this;
+    }
+
+    /**
+     * append headers
+     * @param array $headers
+     * @param array $append
+     * @return array
+     */
+    private function appendHeaders($headers, $append)
+    {
+        array_walk_recursive($append, function ($v, $k) use (&$headers) {
+            $item = is_int($k) ? $v : $k . ': ' . $v;
+            array_push($headers, $item);
+            return $headers;
+        });
+        return $headers;
     }
 }
