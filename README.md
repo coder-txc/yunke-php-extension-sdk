@@ -61,12 +61,13 @@ class DemoClass implements Executable
 more examples see testX.php files in `samples` dir ...
 
 ## Maintainers
-[@dongxiu](yaodx01@mingyuanyun.com)
+[yaodx01@mingyuanyun.com]()
 
 ### Contributors
 This project exists thanks to all the people who contribute. 
 <br/>
 <img src="https://wework.qpic.cn/wwhead/nMl9ssowtibVGyrmvBiaibzDmwbPnGNr4WpZQpE7J0pBKCibHKZCiaueHUC9cicpUnVqSMNCU1cfJvmck/0" height="45" width="45" />
+<img src="http://wework.qpic.cn/bizmail/FpSdz7Qn4ALfxLEqia7mm929jNGksjGzIJFI0ZtLmkBSEp5K4msDQjA/0" height="45" width="45" />
 
 ## License
 The code is distributed under the terms of the MIT license.
