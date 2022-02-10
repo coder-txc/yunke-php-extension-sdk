@@ -2,6 +2,7 @@
 
 namespace ExtensionService;
 
+use ExtensionService\Cache\FileCache;
 use ExtensionService\Exception\JsonEncodeException;
 use ExtensionService\Exception\NonExecutableException;
 use ExtensionService\Exception\ParamException;
@@ -30,6 +31,14 @@ class EpsClient
     /** @var array $headers 请求头 */
     private $headers;
 
+    /** @var array $routerMap 接口路由映射 */
+    private $routerMap = [
+        'list' => '/v1/sdk/ep/list', // 应用可用扩展点列表接口路由
+    ];
+
+    /** @var FileCache $cache */
+    private $cache;
+    
     /**
      * Client constructor.
      *
@@ -93,8 +102,12 @@ class EpsClient
             throw new ParamException("data must be array");
         }
 
-        $bodyStr = $this->buildBodyStr($interfaceMethod, $condition, $businessData);
+        $interfaceMethodIsExist = $this->interfaceMethodIsExist($interfaceMethod);
+        if ($interfaceMethodIsExist === false) {
+            return $this->execClassExecute($execClass, $businessData);
+        }
 
+        $bodyStr = $this->buildBodyStr($interfaceMethod, $condition, $businessData);
         $headers = $this->buildHeaders($bodyStr);
         $appendHeaders = $this->headers ?: $condition;
         $headers = $this->appendHeaders($headers, $appendHeaders);
@@ -109,8 +122,6 @@ class EpsClient
 
             if ($code === EpsResponseCode::SignInvalidate) {
                 throw new SignException($error);
-            } else if ($code === EpsResponseCode::ExtensionPointNotFound) { // 扩展点找不到
-                return $this->execClassExecute($execClass, $businessData);
             } else {
                 throw new ServerException($error, $code);
             }
@@ -189,6 +200,11 @@ class EpsClient
             throw new JsonEncodeException("data json encode fail.");
         }
 
+        $conditionStr = json_encode($condition);
+        if ($conditionStr === false) {
+            throw new JsonEncodeException("condition json encode fail.");
+        }
+
         $body = [
             "interface_method" => $interfaceMethod, // 接口方法
             "condition" => $condition,
@@ -265,5 +281,68 @@ class EpsClient
             return $headers;
         });
         return $headers;
+    }
+
+    /**
+     * 获取应用可用扩展点列表
+     * @return array
+     * @throws ServerException
+     * @author yuki
+     * @date 2022/2/10
+     */
+    private function getList()
+    {
+        $header = $this->buildHeaders('');
+        $url = $this->host . $this->routerMap['list'];
+        $response = Request::instance()->curlRequest('GET', $url, $header);
+        return $response['list'] ?: [];
+    }
+
+    /**
+     * 判断扩展点是否存在
+     * @param $interfaceMethod
+     * @return bool
+     * @throws ServerException
+     * @author yuki
+     * @date 2022/2/10
+     */
+    private function interfaceMethodIsExist($interfaceMethod)
+    {
+        $list = $this->getListCache();
+        if (!$list) {
+            $list = $this->getList();
+        }
+        if (!empty($list)) {
+            $this->cache->store($this->accessKeyId, $list);
+        }
+        $interfaceMethodArray = array_column($list, 'interface_method');
+        return in_array($interfaceMethod, $interfaceMethodArray);
+    }
+
+    /**
+     * 获取应用可用扩展点列表缓存
+     * @return mixed|null
+     * @throws \Exception
+     * @author yuki
+     * @date 2022/2/10
+     */
+    private function getListCache()
+    {
+        $this->cache = $this->getFileCacheClient();
+        return $this->cache->retrieve($this->accessKeyId, true);
+    }
+
+    /**
+     * 实例化FileCache
+     * @return FileCache
+     * @throws \Exception
+     * @author yuki
+     * @date 2022/2/10
+     */
+    private function getFileCacheClient()
+    {
+        $cacheDirPath = __DIR__ . '/../Runtime/';
+        $cacheFileName = $this->accessKeyId . '/v1/sdk/ep/list';
+        return new FileCache($cacheDirPath, $cacheFileName);
     }
 }
