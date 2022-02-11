@@ -92,9 +92,6 @@ class EpsClient
         if (!is_string($interfaceMethod)) {
             throw new ParamException("interfaceMethod must be string");
         }
-        if (empty($condition)) {
-            throw new ParamException("condition is empty");
-        }
         if (!is_array($condition)) {
             throw new ParamException("condition must be array");
         }
@@ -311,9 +308,7 @@ class EpsClient
         $list = $this->getListCache();
         if (!$list) {
             $list = $this->getList();
-        }
-        if (!empty($list)) {
-            $this->cache->store($this->accessKeyId, $list);
+            !empty($list) && $this->cache->store($this->accessKeyId, $list);
         }
         $interfaceMethodArray = array_column($list, 'interface_method');
         return in_array($interfaceMethod, $interfaceMethodArray);
@@ -329,7 +324,7 @@ class EpsClient
     private function getListCache()
     {
         $this->cache = $this->getFileCacheClient();
-        return $this->cache->retrieve($this->accessKeyId, true);
+        return $this->cache->retrieve($this->accessKeyId);
     }
 
     /**
@@ -341,7 +336,7 @@ class EpsClient
      */
     private function getFileCacheClient()
     {
-        $cacheDirPath = __DIR__ . '/../Runtime/';
+        $cacheDirPath = __DIR__ . '/../runtime/';
         $cacheFileName = $this->accessKeyId . '/v1/sdk/ep/list';
         return new FileCache($cacheDirPath, $cacheFileName);
     }

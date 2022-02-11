@@ -64,7 +64,7 @@ class Request
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($httpCode != 200) {
-            throw new ServerException("curl fail, http code: {$httpCode}");
+            throw new ServerException("curl fail, http code: {$httpCode}, output: {$output}");
         }
 
         return json_decode($output, true);
