@@ -1,8 +1,8 @@
 {
-  "name": "yunke/extension",
+  "name": "yunke/php-extension-sdk",
   "description": "extension SDK",
   "type": "library",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "authors": [
     {
       "name": "yaodx01",
@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "yunke\\": "src/"
+      "ExtensionService\\": "src/"
     }
   },
  "repositories": {
