@@ -1,5 +1,8 @@
 {
   "name": "yunke/php-extension-sdk",
+  "description": "extension SDK",
+  "type": "library",
+  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "yaodx01",
