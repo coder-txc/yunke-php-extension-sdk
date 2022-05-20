@@ -1,5 +1,5 @@
 {
-  "name": "yunke/php-extension-sdk",
+  "name": "yunke/extension",
   "description": "extension SDK",
   "type": "library",
   "license": "BSD-3-Clause",
