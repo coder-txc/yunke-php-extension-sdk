@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "ExtensionService\\": "src"
+      "yunke\\": "src/"
     }
   },
  "repositories": {
